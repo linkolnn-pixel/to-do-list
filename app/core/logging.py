@@ -1,5 +1,6 @@
 import logging
 
+
 def configure_logging():
     root_logger = logging.getLogger()
     if not root_logger.handlers:

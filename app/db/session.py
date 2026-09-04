@@ -7,6 +7,7 @@ settings = get_settings()
 engine = create_engine(settings.DATABASE_URL)
 SessionLocal = sessionmaker[Session](bind=engine)
 
+
 def get_db():
     """Функция для инъекции сессии БД"""
     db = SessionLocal()

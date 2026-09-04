@@ -8,10 +8,11 @@ class TaskSchema(BaseModel):
     title: str
     completed: bool
 
+
 class TaskCreateSchema(BaseModel):
     title: str
+
 
 class TaskUpdateSchema(BaseModel):
     title: str | None = None
     completed: bool | None = None
-

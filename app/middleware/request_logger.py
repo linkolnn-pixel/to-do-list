@@ -1,7 +1,7 @@
 import logging
 from time import perf_counter
-from fastapi import Request, Response
 
+from fastapi import Request, Response
 
 request_counter = 0
 
@@ -37,4 +37,3 @@ async def log_request(request: Request, call_next) -> Response:
     response.headers["X-Request-Number"] = str(request_counter)
 
     return response
-

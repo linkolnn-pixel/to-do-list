@@ -9,9 +9,9 @@ class CategoryRepository:
         self.db = db
 
     def get_all(self):
-        return self.db.scalars(select(CategoryORM)).all()
+        return list(self.db.scalars(select(CategoryORM)).all())
 
-    def get_by_id(self, category_id: str) -> CategoryORM:
+    def get_by_id(self, category_id: str) -> CategoryORM | None:
         return self.db.get(CategoryORM, category_id)
 
     def create(self, name: str) -> CategoryORM:

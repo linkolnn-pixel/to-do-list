@@ -1,4 +1,4 @@
-
+from typing import List
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -10,10 +10,10 @@ class TaskRepository:
     def __init__(self, db: Session) -> None:
         self.db = db
 
-    def get_all(self):
-        return self.db.scalars(select(TaskORM)).all()
+    def get_all(self) -> List[TaskORM]:
+        return list(self.db.scalars(select(TaskORM)).all())
 
-    def get_by_id(self, task_id: str) -> TaskORM:
+    def get_by_id(self, task_id: str) -> TaskORM | None:
         return self.db.get(TaskORM, task_id)
 
     def create(self, title: str) -> TaskORM:
@@ -21,5 +21,5 @@ class TaskRepository:
         self.db.add(new_task)
         return new_task
 
-    def delete(self, TaskORM) -> None:
+    def delete(self, task: TaskORM) -> None:
         self.db.delete(TaskORM)
