@@ -33,3 +33,7 @@ warn_unused_ignores = true
 # Не падать на внешних библиотеках без type stubs
 ignore_missing_imports = true
 
+# Тесты
+[tool.pytest.ini_options]
+pythonpath = ["."]
+

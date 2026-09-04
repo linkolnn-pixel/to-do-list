@@ -13,33 +13,33 @@ class TaskService:
 
     def __init__(self, db: Session):
         self.db = db
-        self.task_repository = TaskRepository(db)
+        self.repository = TaskRepository(db)
 
     def list_tasks(self) -> list[TaskSchema]:
-        tasks_orm = self.task_repository.get_all()
-        return [TaskSchema.model_validate(task) for task in tasks_orm]
+        tasks = self.repository.get_all()
+        return [TaskSchema.model_validate(task) for task in tasks]
 
     def create_task(self, task_create: TaskCreateSchema) -> TaskSchema:
-        task_orm = self.task_repository.create(title=task_create.title)
+        task = self.repository.create(title=task_create.title)
         self.db.commit()
-        self.db.refresh(task_orm)
-        return TaskSchema.model_validate(task_orm)
+        self.db.refresh(task)
+        return TaskSchema.model_validate(task)
 
     def update_task(self, task_id: str, task_update: TaskUpdateSchema) -> TaskSchema:
-        task_for_update = self.task_repository.get_by_id(task_id=task_id)
-        if not task_for_update:
+        task = self.repository.get_by_id(task_id=task_id)
+        if not task:
             raise TaskNotFound(f"Задача с id {task_id} не найдена")
         if task_update.title is not None:
-            task_for_update.title = task_update.title
+            task.title = task_update.title
         if task_update.completed is not None:
-            task_for_update.completed = task_update.completed
+            task.completed = task_update.completed
         self.db.commit()
-        self.db.refresh(task_for_update)
-        return TaskSchema.model_validate(task_for_update)
+        self.db.refresh(task)
+        return TaskSchema.model_validate(task)
 
     def delete_task(self, task_id: str) -> None:
-        task_for_delete = self.task_repository.get_by_id(task_id=task_id)
-        if not task_for_delete:
+        task = self.repository.get_by_id(task_id=task_id)
+        if not task:
             raise TaskNotFound(f"Задача с id {task_id} не найдена")
-        self.task_repository.delete(task_for_delete)
+        self.repository.delete(task)
         self.db.commit()

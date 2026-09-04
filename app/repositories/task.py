@@ -7,19 +7,25 @@ from app.models.task import TaskORM
 
 
 class TaskRepository:
-    def __init__(self, db: Session) -> None:
+    """Ключевые операции с таблицей tasks в БД"""
+
+    def __init__(self, db: Session):
         self.db = db
 
     def get_all(self) -> List[TaskORM]:
+        """Получить все записи tasks"""
         return list(self.db.scalars(select(TaskORM)).all())
 
     def get_by_id(self, task_id: str) -> TaskORM | None:
+        """Получить запись task по id"""
         return self.db.get(TaskORM, task_id)
 
     def create(self, title: str) -> TaskORM:
-        new_task = TaskORM(title=title, completed=False)
-        self.db.add(new_task)
-        return new_task
+        """Создать запись task"""
+        task = TaskORM(title=title, completed=False)
+        self.db.add(task)
+        return task
 
     def delete(self, task: TaskORM) -> None:
-        self.db.delete(TaskORM)
+        """Удалить запись task"""
+        self.db.delete(task)

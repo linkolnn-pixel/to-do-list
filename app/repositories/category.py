@@ -5,19 +5,25 @@ from app.models.category import CategoryORM
 
 
 class CategoryRepository:
-    def __init__(self, db: Session) -> None:
+    """Ключевые операции с таблицей categories в БД"""
+
+    def __init__(self, db: Session):
         self.db = db
 
-    def get_all(self):
+    def get_all(self) -> list[CategoryORM]:
+        """Получить все записи categories"""
         return list(self.db.scalars(select(CategoryORM)).all())
 
     def get_by_id(self, category_id: str) -> CategoryORM | None:
+        """Получить запись category по id"""
         return self.db.get(CategoryORM, category_id)
 
     def create(self, name: str) -> CategoryORM:
-        new_category = CategoryORM(name=name)
-        self.db.add(new_category)
-        return new_category
+        """Создать запись category"""
+        category = CategoryORM(name=name)
+        self.db.add(category)
+        return category
 
-    def delete(self, CategoryORM) -> None:
-        self.db.delete(CategoryORM)
+    def delete(self, category: CategoryORM) -> None:
+        """Удалить запись category"""
+        self.db.delete(category)
