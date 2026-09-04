@@ -1,20 +1,12 @@
-
-from fastapi import FastAPI, status, HTTPException, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-from contextlib import asynccontextmanager
-
-from app.models.base import Base
-from app.db.session import engine
-
 from app.api.routers.task import router as task_router
 from app.api.routers.category import router as category_router
+from app.core.logging import configure_logging
+from app.middleware.request_logger import log_request
 
-
-
-app = FastAPI(lifespan=lifespan)
+configure_logging()
+app = FastAPI()
 app.include_router(router=task_router)
 app.include_router(router=category_router)
 
@@ -22,7 +14,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
     allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
 )
+
+app.middleware("http")(log_request)
+
+
 
 
 
